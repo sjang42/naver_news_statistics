@@ -42,15 +42,25 @@ def get_texts(fname: str):
     return texts
 
 
-def save_clean_text(press: str, dirname: str):
+def save_clean_text(press: str, dirname: str, out_dirname: str):
+    # get file name
     fname = get_fname_sewolho(press, dirname)
-    out_fname = fname.replace('.csv', '_clean.csv')
 
+    # open file and get dict list
     total_news = csv2dictlist(fname)
 
+    # execute clean text
     for news in total_news:
-        news['clean_text_2mth'] = clean_text(news['text'])
+        news['clean_text'] = clean_text(news['text'])
 
+    # determine output file name
+    out_fname = fname.split('/')[-1]
+    out_fname = out_fname.replace('.csv', '_clean.csv')
+    out_fname = os.path.join(out_dirname, out_fname)
+    if not os.path.isdir(out_dirname):
+        os.makedirs(out_dirname)
+
+    # save to out_fname
     with open(out_fname, 'w', newline='', encoding='utf-8-sig') as csvoutput:
         writer = csv.DictWriter(csvoutput, fieldnames=total_news[0].keys())
         writer.writeheader()
@@ -62,6 +72,7 @@ if __name__ == '__main__':
     args = argparse.ArgumentParser()
     args.add_argument('--press', type=str, default='더불어민주당')
     args.add_argument('--dir', type=str, default='sewolho')
+    args.add_argument('--out_dir', type=str, default='clean_text')
 
     config = args.parse_args()
-    save_clean_text(config.press, config.dir)
+    save_clean_text(config.press, config.dir, config.out_dir)
