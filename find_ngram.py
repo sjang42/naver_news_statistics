@@ -3,6 +3,7 @@ import time
 import os
 from tools import get_fname_sewolho
 from clean_text import get_cleantexts
+import argparse
 
 
 def tokenize(string):
@@ -68,7 +69,8 @@ def save_ngram(ngrams,
     # determine file name to save
     out_fnames = list()
     for length in lengths:
-        out_fname = fname.replace('.csv', '_' + str(length) + 'ngram')
+        out_fname = fname.split('/')[-1]
+        out_fname = out_fname.replace('.csv', '_' + str(length) + 'ngram')
         if min_count < 0:
             out_fname = out_fname + '_all.csv'
         else:
@@ -108,8 +110,23 @@ def get_input():
 
 
 if __name__ == '__main__':
-    print('----- Count Ngram -----')
-    press, dirname, min_length, max_length, min_count = get_input()
+    args = argparse.ArgumentParser()
+    args.add_argument('--press', type=str, default='자유한국당')
+    args.add_argument('--dirname', type=str, default='clean_text')
+    args.add_argument('--min_length', type=int, default='1')
+    args.add_argument('--max_length', type=int, default='3')
+    args.add_argument('--min_count', type=int, default='-1')
+
+    # print('----- Count Ngram -----')
+    # press, dirname, min_length, max_length, min_count = get_input()
+
+    config = args.parse_args()
+
+    press = config.press
+    dirname = config.dirname
+    min_length = config.min_length
+    max_length = config.max_length
+    min_count = config.min_count
 
     fname = get_fname_sewolho(press, dirname)
     fname = fname.replace('.csv', '_clean.csv')
