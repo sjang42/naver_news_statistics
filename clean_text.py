@@ -33,7 +33,7 @@ def clean_text(text: str):
 
 def get_cleantexts(fname: str):
     news = csv2dictlist(fname)
-    clean_texts = [line['clean_text_2mth'] for line in news]
+    clean_texts = [line['clean_text'] for line in news]
     return clean_texts
 
 
