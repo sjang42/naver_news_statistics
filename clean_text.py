@@ -11,14 +11,16 @@ def clean_text(text: str):
 
     # delete html tag
     cleaned_text = re.sub(r'<!--.*-->', r' \\n ', cleaned_text)
-    cleaned_text = re.sub(r'\\xa0|\\uf0a0|\\uf09f|\\u3000|\\ufeff', r' \\n ', cleaned_text)
+    cleaned_text = re.sub(r'\\xa0|\\uf0a0|\\uf0a7|\\uf09f|\\u3000|\\ufeff', r' \\n ', cleaned_text)
 
     # make new line
     cleaned_text = re.sub(r'\\t|\\r|\\n|\.', r' \\n ', cleaned_text)
     cleaned_text = re.sub(r'(\\n *)+', r' \\n ', cleaned_text)
 
     # delete special characters leave only hangle, alphabet, numbers
-    cleaned_text = re.sub(r'[^가-힣|\w|\\n]', ' ', cleaned_text)
+    # delete not complete hangle also. For example, ㅌ, ㄴ, ...
+    cleaned_text = re.sub(r'[^가-힣a-zA-Z1-9|\\n]', ' ', cleaned_text)
+    cleaned_text = re.sub(r'[ㄱ-ㅎㅏ-ㅣ]', ' ', cleaned_text)
 
     # need: delete reporter and email and return
 
