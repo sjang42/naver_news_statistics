@@ -1,0 +1,9 @@
+sewolho/
+ngrams/
+__pycache__/
+.idea/
+clean_sewolho/
+*.csv
+*.txt
+.DS_Store
+test.py
