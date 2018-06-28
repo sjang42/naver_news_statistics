@@ -3,6 +3,9 @@ import time
 import os
 from tools import get_fname_sewolho
 from clean_text import get_cleantexts
+from tokenizer import trim_word
+from konlpy.tag import Mecab, Kkma
+
 import argparse
 
 
@@ -10,7 +13,14 @@ def tokenize(string):
     """Convert string to lowercase and split into words (ignoring
     punctuation), returning list of words.
     """
-    return string.split(' ')
+    # make list of words splitting by space
+    split_string = string.split()
+
+    # trim each word
+    tagger = Kkma()
+    split_string = [trim_word(word, tagger) for word in split_string]
+
+    return split_string
 
 
 def count_ngrams(lines, min_length=2, max_length=4):
@@ -116,9 +126,6 @@ if __name__ == '__main__':
     args.add_argument('--min_length', type=int, default='1')
     args.add_argument('--max_length', type=int, default='3')
     args.add_argument('--min_count', type=int, default='-1')
-
-    # print('----- Count Ngram -----')
-    # press, dirname, min_length, max_length, min_count = get_input()
 
     config = args.parse_args()
 
